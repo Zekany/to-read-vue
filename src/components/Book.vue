@@ -20,7 +20,7 @@
 </template>
 
 <script>
-//import auth from '../auth'
+import auth from '../auth'
 export default {
   name: 'book',
 
@@ -44,16 +44,13 @@ export default {
         priority: this.book.priority
       }
 
-
+       auth.addBook(this, book)
        console.log(book)
 
        this.book.title = ''
        this.book.author = ''
-       this.book.priority = ''
+       this.book.priority = 'Medium'
 
-    },
-    hello() {
-      console.log("Hello")
     }
 
   }

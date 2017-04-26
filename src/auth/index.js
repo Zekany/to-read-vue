@@ -1,6 +1,7 @@
 const API_URL = 'http://localhost:3000/'
 const LOGIN_URL = API_URL + 'api/login'
 const REGISTER_URL = API_URL + 'api/register'
+const BOOK_URL = API_URL + 'api/addbook'
 
 export default {
   user: {
@@ -51,5 +52,19 @@ export default {
       console.error(err)
     }
   },
+
+  async addBook (context, book) {
+    try {
+      let data = await context.$http.post(BOOK_URL, book)
+      console.log(book)
+      if (data.status === 200) {
+        console.log('Book succesfully added')
+      } else {
+        console.log('An error has occured')
+      }
+    } catch (err) {
+      console.error(err)
+    }
+  }
 
 }
