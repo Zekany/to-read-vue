@@ -1,7 +1,8 @@
 const API_URL = 'http://localhost:3000/'
 const LOGIN_URL = API_URL + 'api/login'
 const REGISTER_URL = API_URL + 'api/register'
-const BOOK_URL = API_URL + 'api/addbook'
+const ADD_BOOK_URL = API_URL + 'api/addbook'
+const GET_BOOKS_URL = API_URL + 'api/getbooks'
 
 export default {
   user: {
@@ -14,6 +15,10 @@ export default {
     try {
       const response = await context.$http.post(LOGIN_URL, creds)
       const token = response.body
+      localStorage.setItem('id_token', response.body)
+      console.log(localStorage.getItem('id_token'))
+      this.user.authenticated = true
+      console.log(this.user)
       console.log('token', token)
       //localStorage.setItem('id_token', token)
 
@@ -25,12 +30,12 @@ export default {
 
   },
 
-  async asyncLogout(context) {
+  async logout (context) {
     try {
-      //console.log(this.user)
-      //console.log(localStorage.getItem('id_token'))
-      //localStorage.removeItem('id_token')
-      //this.user.authenticated = false
+      console.log(this.user)
+      console.log(localStorage.getItem('id_token'))
+      localStorage.removeItem('id_token')
+      this.user.authenticated = false
       // this won't print anything either
       console.log(this.user)
       //context.$router.push('/')
@@ -50,12 +55,28 @@ export default {
       }
     } catch (err) {
       console.error(err)
+      throw err
+    }
+  },
+
+  //must be signed in
+  async getBooks (context, userName) {
+    try {
+      let data = await context.$http.post(GET_BOOKS_URL, userName)
+      console.log(data)
+      if (data.status === 200) {
+        console.log('User succesfully added')
+      } else {
+        console.log('An error has occured')
+      }
+    } catch (err) {
+      console.error(err)
     }
   },
 
   async addBook (context, book) {
     try {
-      let data = await context.$http.post(BOOK_URL, book)
+      let data = await context.$http.post(ADD_BOOK_URL, book)
       console.log(book)
       if (data.status === 200) {
         console.log('Book succesfully added')
